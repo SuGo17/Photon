@@ -6,7 +6,9 @@ const prevBtn = document.querySelector("#prev-btn");
 const inpEle = document.querySelector("#search-text");
 const searchTitle = document.querySelector(".title");
 const logo = document.querySelector(".logo");
+const noResult = document.querySelector(".no-result");
 const searchQuery = document.querySelector(".title span");
+const pageNo = document.querySelector(".page-no span");
 
 class App {
   page = 1;
@@ -22,17 +24,19 @@ class App {
       this.page += 1;
       this.display();
       logo.scrollIntoView({ behavior: "smooth" });
+      pageNo.innerHTML = this.page;
     });
     prevBtn.addEventListener("click", () => {
-      if (this.page <= 0) return;
+      if (this.page - 1 <= 0) return;
       this.page -= 1;
       this.display();
       logo.scrollIntoView({ behavior: "smooth" });
+      pageNo.innerHTML = this.page;
     });
   }
   async _fetchData() {
     //prettier-ignore
-    const dataFetch = await fetch(`https://pixabay.com/api/?key=${this.#apiKey}&q=${this.#keyword}&image_type=photo&page=${"" + this.page}&per_page=42`
+    const dataFetch = await fetch(`https://pixabay.com/api/?key=${this.#apiKey}&q=${this.#keyword}&image_type=photo&page=${"" + this.page}&per_page=30`
     );
     const data = await dataFetch.json();
     return data;
@@ -42,12 +46,23 @@ class App {
     gallery.innerHTML = "";
     const data = await this._fetchData();
     const { hits: images, id } = data;
-    images.forEach((ele, i) => {
-      this._addImgToGallery(ele, id);
-    });
+    if (images.length === 0) {
+      noResult.style.display = "flex";
+      noResult.innerHTML = `No Search Result For: <span>${
+        this.#keyword
+      }</span>`;
+      setTimeout(() => {
+        loadEle.style.display = "none";
+      }, 1000);
+      return;
+    }
     setTimeout(() => {
       loadEle.style.display = "none";
     }, 1000);
+    images.forEach((ele, i) => {
+      this._addImgToGallery(ele, id);
+    });
+    noResult.style.display = "none";
   }
   //adding image to gallery element
   _addImgToGallery(arr, query) {
@@ -71,12 +86,14 @@ class App {
   _onSubmit() {
     if (!inpEle.value) return;
     this.#keyword = inpEle.value;
+    this.page = 1;
     inpEle.value = "";
     inpEle.blur();
     this.display();
     searchTitle.innerHTML = `Seacrh Results for:- <span>${
       this.#keyword
     }</span>`;
+    pageNo.innerHTML = this.page;
   }
 }
 
