@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Photon</title>
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="shortcut icon" href="./icon.png" type="image/x-icon" />
     <script defer src="./app.js"></script>
   </head>
   <body>
@@ -18,6 +19,7 @@
     </header>
     <main>
       <div class="title"></div>
+      <div class="no-result"></div>
       <div class="gallery"></div>
       <div class="load">
         <div class="circle circle-1"></div>
@@ -26,8 +28,14 @@
       </div>
       <div class="btns">
         <button type="button" id="prev-btn">Prev</button>
+        <p class="page-no">Page: <span>1</span></p>
         <button type="button" id="next-btn">Next</button>
       </div>
+      <a href="#" id="top"><ion-icon name="caret-up-outline"></ion-icon></a>
     </main>
+    <!-- prettier-ignore -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <!-- prettier-ignore -->
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
   </body>
 </html>
